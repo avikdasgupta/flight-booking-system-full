@@ -124,9 +124,37 @@ docker-compose up --build
 # Services available at:
 # Frontend: http://localhost:3000
 # Backend:  http://localhost:5000
-# MongoDB:  mongodb://localhost:27017
+# MongoDB:  mongodb://localhost:27017  (see credentials below)
 # Redis:    redis://localhost:6379
 ```
+
+### Connecting to the Docker MongoDB instance
+
+The Docker Compose file initialises MongoDB with authentication:
+
+| Field    | Value            |
+|----------|------------------|
+| Host     | `localhost:27017` |
+| Username | `admin`           |
+| Password | `password`        |
+| Database | `flight_booking`  |
+| authSource | `admin`         |
+
+**Connection string (copy into `.env` or any MongoDB client):**
+```
+mongodb://admin:password@localhost:27017/flight_booking?authSource=admin
+```
+
+**Connect with mongosh:**
+```bash
+mongosh "mongodb://admin:password@localhost:27017/flight_booking?authSource=admin"
+```
+
+**Connect with MongoDB Compass:**
+Open MongoDB Compass and paste the connection string above, or fill in the individual fields (Advanced Connection Options → Authentication tab → Username/Password).
+
+> **Note**: Change the default password before deploying to any non-local environment.
+> In Atlas or Render/Vercel deployments, supply your own credentials via the `MONGO_URI` environment variable.
 
 ---
 
