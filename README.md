@@ -11,7 +11,7 @@ Browser → Next.js SSR → Express API → Redis (cache/locks) → MongoDB
 ```
 
 **Frontend**: Next.js 16 (SSR + App Router) → Vercel  
-**Backend**: Node.js + Express.js → Render  
+**Backend**: Node.js + Express.js → Vercel (serverless) or Render  
 **Database**: MongoDB (Mongoose) → Atlas  
 **Cache/Lock**: Redis → Redis Cloud  
 **CI/CD**: GitHub Actions  
@@ -151,7 +151,7 @@ Each flight detail page generates dynamic metadata (title, description, OpenGrap
 
 See [docs/deployment.md](docs/deployment.md) for full instructions.
 
-**Free tier stack**: MongoDB Atlas + Redis Cloud + Render (backend) + Vercel (frontend)
+**Free tier stack**: MongoDB Atlas + Redis Cloud + Vercel or Render (backend) + Vercel (frontend)
 
 ---
 
