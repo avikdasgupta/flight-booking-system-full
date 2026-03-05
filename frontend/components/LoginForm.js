@@ -61,7 +61,7 @@ export default function LoginForm() {
       </button>
 
       <p className="text-center mt-4" style={{ color: 'var(--gray-500)', fontSize: '0.875rem' }}>
-        Don't have an account?{' '}
+        Don&apos;t have an account?{' '}
         <Link href="/auth/register" style={{ fontWeight: '600' }}>
           Register here
         </Link>

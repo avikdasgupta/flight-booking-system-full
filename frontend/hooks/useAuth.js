@@ -1,26 +1,23 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { authService } from '../services';
 
 const AuthContext = createContext(null);
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
+function getStoredUser() {
+  if (typeof window === 'undefined') return null;
+  try {
     const stored = localStorage.getItem('user');
-    if (stored) {
-      try {
-        setUser(JSON.parse(stored));
-      } catch {
-        localStorage.removeItem('user');
-      }
-    }
-    setLoading(false);
-  }, []);
+    return stored ? JSON.parse(stored) : null;
+  } catch {
+    return null;
+  }
+}
 
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(getStoredUser);
+  const [loading, setLoading] = useState(false);
   const login = async (email, password) => {
     const res = await authService.login({ email, password });
     const { user: userData, token } = res.data.data;
