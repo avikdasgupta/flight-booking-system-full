@@ -2,12 +2,16 @@
 
 ## Free Hosting Stack
 
-| Service    | Provider       | Free Tier                        |
-|------------|----------------|----------------------------------|
-| Frontend   | Vercel         | Unlimited personal projects      |
-| Backend    | Render         | 750 hours/month (spins down)     |
-| MongoDB    | MongoDB Atlas  | 512 MB M0 cluster                |
-| Redis      | Redis Cloud    | 30 MB database                   |
+| Service    | Provider                    | Free Tier                        |
+|------------|-----------------------------|----------------------------------|
+| Frontend   | Vercel                      | Unlimited personal projects      |
+| Backend    | Vercel **or** Render        | Vercel: Serverless (free hobby); Render: 750 hours/month (spins down) |
+| MongoDB    | MongoDB Atlas               | 512 MB M0 cluster                |
+| Redis      | Redis Cloud                 | 30 MB database                   |
+
+> **Which backend host should I choose?**
+> - **Vercel** — Zero-config, instant deploys from GitHub, no cold-start spin-down delay. Ideal when you already host the frontend on Vercel. The Express app is wrapped as a single serverless function. Redis caching/locking is disabled when `REDIS_URL` is not set (non-fatal).
+> - **Render** — Traditional long-running server. Better for WebSocket or long-polling workloads, but the free tier spins down after 15 minutes of inactivity (first request after idle takes ~30 s to respond).
 
 ---
 
@@ -37,7 +41,32 @@
 
 ---
 
-## 3. Backend on Render
+## 3. Backend on Vercel (Serverless)
+
+> **Alternative**: see [Section 4](#4-backend-on-render-traditional-server) for the Render (traditional server) option.
+
+1. Sign up at [vercel.com](https://vercel.com)
+2. Import your GitHub repository
+3. Set:
+   - **Root Directory**: `backend`
+   - **Framework Preset**: Other
+4. Add environment variables:
+   ```
+   NODE_ENV=production
+   MONGO_URI=<your-atlas-uri>
+   JWT_SECRET=<your-secret-key-min-32-chars>
+   JWT_EXPIRES_IN=7d
+   REDIS_URL=<your-redis-cloud-url>   # optional — Redis is non-fatal
+   ALLOWED_ORIGINS=https://your-app.vercel.app
+   ```
+5. Click **Deploy**
+6. Note your backend URL: `https://your-backend.vercel.app`
+
+> **Tip**: The `backend/vercel.json` already configures `@vercel/node` to wrap the Express app as a single serverless function and route all requests to it — no extra configuration needed.
+
+---
+
+## 4. Backend on Render (Traditional Server)
 
 1. Sign up at [render.com](https://render.com)
 2. Click **New Web Service** → Connect your GitHub repo
@@ -60,7 +89,7 @@
 
 ---
 
-## 4. Frontend on Vercel
+## 5. Frontend on Vercel
 
 1. Sign up at [vercel.com](https://vercel.com)
 2. Import your GitHub repository
@@ -69,15 +98,15 @@
    - **Framework Preset**: Next.js
 4. Add environment variables:
    ```
-   NEXT_PUBLIC_API_URL=https://your-backend.onrender.com
-   API_BASE_URL=https://your-backend.onrender.com
+   NEXT_PUBLIC_API_URL=https://your-backend.vercel.app   # or your-backend.onrender.com
+   API_BASE_URL=https://your-backend.vercel.app           # or your-backend.onrender.com
    NEXT_PUBLIC_SITE_URL=https://your-app.vercel.app
    ```
 5. Deploy
 
 ---
 
-## 5. Local Docker Deployment
+## 6. Local Docker Deployment
 
 ```bash
 # Clone the repository
@@ -101,12 +130,12 @@ docker-compose up --build
 
 ---
 
-## 6. Initial Admin Setup
+## 7. Initial Admin Setup
 
-After deployment, create an admin user:
+After deployment, create an admin user (replace the URL with your backend URL):
 
 ```bash
-curl -X POST https://your-backend.onrender.com/api/auth/register \
+curl -X POST https://your-backend.vercel.app/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Admin",
@@ -118,7 +147,7 @@ curl -X POST https://your-backend.onrender.com/api/auth/register \
 
 ---
 
-## 7. Environment Variables Reference
+## 8. Environment Variables Reference
 
 ### Backend
 | Variable | Description | Required |
@@ -140,7 +169,7 @@ curl -X POST https://your-backend.onrender.com/api/auth/register \
 
 ---
 
-## 8. CI/CD with GitHub Actions
+## 9. CI/CD with GitHub Actions
 
 The included `.github/workflows/ci.yml` automatically:
 

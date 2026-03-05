@@ -1,4 +1,5 @@
 jest.mock('../src/repositories/userRepository');
+jest.mock('../src/config/database', () => jest.fn().mockResolvedValue());
 jest.mock('../src/config/redis', () => ({ connectRedis: jest.fn(), getRedisClient: jest.fn(() => null) }));
 
 process.env.JWT_SECRET = 'test_jwt_secret_key_for_testing';

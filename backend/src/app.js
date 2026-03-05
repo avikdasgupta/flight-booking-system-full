@@ -18,6 +18,19 @@ const bookingRoutes = require('./routes/bookingRoutes');
 
 const app = express();
 
+// Ensure database is connected before handling requests.
+// In a traditional server setup this is handled by server.js, but in
+// serverless environments (e.g. Vercel) server.js is never executed, so
+// the connection is established lazily here instead.
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Security middleware
 app.use(helmet());
 app.use(cors({
