@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: 'standalone',
+  // standalone output is used only for Docker; Vercel builds without it
+  ...(process.env.BUILD_STANDALONE === '1' && { output: 'standalone' }),
   env: {
     API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:5000',
   },

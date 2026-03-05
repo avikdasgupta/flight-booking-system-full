@@ -11,17 +11,20 @@
 
 ---
 
-## 1. MongoDB Atlas Setup
+## 1. MongoDB Atlas Setup (Free M0 Cluster)
 
 1. Sign up at [cloud.mongodb.com](https://cloud.mongodb.com)
-2. Create a free M0 cluster
-3. Go to **Database Access** → Add a database user
-4. Go to **Network Access** → Add IP `0.0.0.0/0` (allow all)
-5. Go to **Clusters** → Connect → Connect your application
-6. Copy the connection string (replace `<password>` with your password):
+2. Create a free **M0** cluster (choose any region)
+3. Go to **Database Access** → Add a database user (note the username and password)
+4. Go to **Network Access** → Add IP `0.0.0.0/0` (allow all IPs)
+5. Go to **Clusters** → Connect → **Drivers** → Copy the connection string
+6. Replace `<username>`, `<password>`, and `<cluster>` in your `.env`:
+
    ```
-   mongodb+srv://user:password@cluster0.xxxxx.mongodb.net/flight_booking?retryWrites=true&w=majority
+   MONGO_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/flight_booking?retryWrites=true&w=majority
    ```
+
+> **Tip**: `flight_booking` is the database name — Atlas creates it automatically on first use.
 
 ---
 
@@ -143,8 +146,28 @@ The included `.github/workflows/ci.yml` automatically:
 
 1. Runs backend tests on every push/PR
 2. Lints and builds the frontend
-3. Builds Docker images (on main branch)
+3. Builds Docker images on every successful CI run
+4. Deploys the frontend to Vercel on every push to `main`
 
-To enable automated deployment:
-- **Vercel**: Install the Vercel GitHub App for automatic deployments
-- **Render**: Enable "Auto-Deploy" in your service settings
+### Required GitHub Secrets for Vercel deployment
+
+Add the following secrets in **GitHub → Settings → Secrets and variables → Actions**:
+
+| Secret | How to obtain |
+|--------|---------------|
+| `VERCEL_TOKEN` | [vercel.com/account/tokens](https://vercel.com/account/tokens) |
+| `VERCEL_ORG_ID` | Run `vercel whoami` or find in Vercel project settings |
+| `VERCEL_PROJECT_ID` | Run `vercel link` inside `frontend/` and read `.vercel/project.json` |
+
+To retrieve `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` locally:
+
+```bash
+cd frontend
+npm install -g vercel
+vercel login        # authenticate
+vercel link         # link to your Vercel project (follow prompts)
+cat .vercel/project.json
+# → { "orgId": "...", "projectId": "..." }
+```
+
+Once the secrets are set, every push to `main` will automatically deploy the frontend to Vercel.
