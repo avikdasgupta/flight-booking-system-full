@@ -46,8 +46,8 @@ SkyBook is a production-grade flight booking system built with a modern, scalabl
 
 ## Key Components
 
-### Frontend (Next.js 14)
-- **App Router**: Uses Next.js 14 App Router for routing
+### Frontend (Next.js 16)
+- **App Router**: Uses Next.js 16 App Router for routing
 - **Server Components**: Flight search and detail pages use SSR for SEO
 - **Client Components**: Interactive forms and booking flow
 - **API Client**: Centralized Axios instance with JWT interceptors

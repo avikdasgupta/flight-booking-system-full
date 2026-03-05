@@ -10,7 +10,7 @@ A production-grade full-stack flight booking system built with Next.js, Express.
 Browser → Next.js SSR → Express API → Redis (cache/locks) → MongoDB
 ```
 
-**Frontend**: Next.js 14 (SSR + App Router) → Vercel  
+**Frontend**: Next.js 16 (SSR + App Router) → Vercel  
 **Backend**: Node.js + Express.js → Render  
 **Database**: MongoDB (Mongoose) → Atlas  
 **Cache/Lock**: Redis → Redis Cloud  
@@ -49,7 +49,7 @@ flight-booking-system-full/
 │   │   ├── config/
 │   │   └── utils/
 │   └── __tests__/
-├── frontend/                # Next.js 14
+├── frontend/                # Next.js 16
 │   ├── app/                 # App Router pages
 │   ├── components/
 │   ├── services/
