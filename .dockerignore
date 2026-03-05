@@ -1,0 +1,22 @@
+# Ignore the following files and directories
+
+# Node modules
+node_modules/
+
+# Build directories
+build/
+dist/
+
+# Logs
+logs/
+*.log
+
+# Dockerfile
+Dockerfile
+
+# .env files
+.env
+
+# System files
+.DS_Store
+Thumbs.db
